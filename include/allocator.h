@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/_types/_u_int32_t.h>
+#include <sys/_types/_u_int8_t.h>
+#include <sys/mman.h>
+
+typedef struct block {
+  size_t size;
+  struct block *next;
+  struct block *prev;
+  int marked;
+} block_t;
+
+typedef struct alloc {
+  block_t *free_list;
+  block_t *used_list;
+} alloc_t;
+
+#define PAGE_SIZE 4096
+#define HEADER_SIZE sizeof(block_t)
+#define ALLOC_FAILURE 1
+#define ALLOC_SUCCESS 0
+
+static alloc_t allocator;
