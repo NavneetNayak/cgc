@@ -22,3 +22,7 @@ typedef struct alloc {
 #define ALLOC_SUCCESS 0
 
 static alloc_t allocator;
+
+alloc_t *alloc_init();
+void *mem_alloc(size_t num_units);
+u_int16_t mem_dealloc(void * mem);
