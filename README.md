@@ -1,8 +1,15 @@
 # cgc
-A Garbage Collector Written In C.
+A Mark And Sweep Garbage Collector Written In C.
 
+DONE:
 - [x] Memory allocation 
 - [x] Memory deallocation with merging of memory
-- [x] Mark and Sweep Garbage Collector
+- [x] Marking all reachable blocks for root pointers of stack frame
+- [x] Sweeping unreachable blocks
+
+TODO:
 - [ ] Make the code not scuffed
-- [ ] Further algorithm exploration and multithreading...?
+- [ ] Hashtable to store block information
+- [ ] Keep track of Heap limits
+- [ ] Multithreading
+- [ ] Further algorithm implementation
