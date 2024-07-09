@@ -9,6 +9,7 @@ DONE:
 
 TODO:
 - [ ] Make the code not scuffed
+- [ ] Scan the Data segment and registers
 - [ ] Hashtable to store block information
 - [ ] Keep track of Heap limits
 - [ ] Multithreading
