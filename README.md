@@ -3,5 +3,6 @@ A Garbage Collector Written In C.
 
 - [x] Memory allocation 
 - [x] Memory deallocation with merging of memory
-- [ ] Mark and Sweep Garbage Collector
+- [x] Mark and Sweep Garbage Collector
+- [ ] Make the code not scuffed
 - [ ] Further algorithm exploration and multithreading...?
