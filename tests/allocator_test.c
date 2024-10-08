@@ -1,4 +1,4 @@
-#include "allocator.h"
+#include "../include/gc.h"
 
 void print_freelist(block_t *list) {
   printf("Free List: \n");

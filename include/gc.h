@@ -1,21 +1,21 @@
-#define _XOPEN_SOURCE 700
-#define _DARWIN_C_SOURCE
+// #define _XOPEN_SOURCE 700
+// #define _DARWIN_C_SOURCE
 
-#include <dlfcn.h>
-#include <execinfo.h> // for backtrace functions
-#include <libunwind.h>
-#include <pthread.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+// #include <dlfcn.h>
+// #include <execinfo.h> // for backtrace functions
+// #include <libunwind.h>
+// #include <pthread.h>
+// #include <stdbool.h>
+// #include <stddef.h>
+// #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/_types/_u_int32_t.h>
-#include <sys/_types/_u_int8_t.h>
+// #include <sys/_types/_u_int32_t.h>
+// #include <sys/_types/_u_int8_t.h>
 #include <sys/mman.h>
-#include <sys/sysctl.h>
-#include <ucontext.h>
-#include <unistd.h>
+// #include <sys/sysctl.h>
+// #include <ucontext.h>
+// #include <unistd.h>
 
 typedef struct block {
   size_t size;
@@ -35,10 +35,11 @@ typedef struct alloc {
 #define ALLOC_FAILURE 1
 #define ALLOC_SUCCESS 0
 
-static alloc_t allocator;
-
-u_int16_t mem_dealloc(void *mem);
-u_int16_t add_to_free_list(block_t *block);
+u_int16_t mem_dealloc(alloc_t *allocator, void *mem);
+u_int16_t add_to_free_list(alloc_t *allocator, block_t *block);
 void print_freelist(block_t *);
 void print_usedlist(block_t *);
 static uintptr_t *getbos();
+alloc_t *alloc_init();
+void *mem_alloc(alloc_t *allocator, size_t num_units);
+void gc_collect(alloc_t *allocator);

@@ -1,5 +1,7 @@
-static void scan_mem(uintptr_t *start, uintptr_t *end) {
-  block_t *current_block = allocator.used_list->next;
+#include "../include/gc.h"
+
+static void scan_mem(alloc_t *allocator, uintptr_t *start, uintptr_t *end) {
+  block_t *current_block = allocator->used_list->next;
 
   // Traverse through each pointer in the region defined by start and end
   for (; start < end; start++) {
@@ -25,21 +27,21 @@ static void scan_mem(uintptr_t *start, uintptr_t *end) {
     }
 
     // Reset to the start of the used list for next pointer in the region
-    current_block = allocator.used_list->next;
+    current_block = allocator->used_list->next;
   }
 }
 
-void gc_collect() {
-  void *bos = allocator.bos;
+void gc_collect(alloc_t *allocator) {
+  void *bos = allocator->bos;
   void *tos = __builtin_frame_address(0);
 
-  scan_mem(tos, bos);
-  print_usedlist(allocator.used_list);
+  scan_mem(allocator, tos, bos);
+  print_usedlist(allocator->used_list);
 
   printf("Finished scanning root pointers\n");
 
   // DFS
-  block_t *used_list = allocator.used_list->next;
+  block_t *used_list = allocator->used_list->next;
   while (used_list != NULL) {
     if (used_list->marked == 0) {
       used_list = used_list->next;
@@ -47,14 +49,14 @@ void gc_collect() {
     }
 
     printf("Currently scanning block of size: %ld\n", used_list->size);
-    scan_mem((void *)(used_list + 1), (void *)(used_list) + used_list->size);
+    scan_mem(allocator, (void *)(used_list + 1), (void *)(used_list) + used_list->size);
 
     used_list = used_list->next;
   }
 
-  print_usedlist(allocator.used_list);
+  print_usedlist(allocator->used_list);
 
-  block_t *current = allocator.used_list->next;
+  block_t *current = allocator->used_list->next;
   while (current != NULL) {
     if (current->marked) {
       current->marked = 0; // Reset mark for next collection
@@ -74,7 +76,7 @@ void gc_collect() {
 
       // Add to free list
       printf("Reclaimed block of size: %ld\n", unused_block->size);
-      add_to_free_list(unused_block);
+      add_to_free_list(allocator, unused_block);
     }
   }
 }
