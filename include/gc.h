@@ -23,7 +23,7 @@ typedef struct alloc {
 #define PAGE_SIZE 4096
 #define HEADER_SIZE sizeof(block_t)
 // #define ALLOC_LIMIT 2 * PAGE_SIZE
-#define ALLOC_LIMIT 128
+#define ALLOC_LIMIT 2 * PAGE_SIZE
 #define ALLOC_FAILURE 1
 #define ALLOC_SUCCESS 0
 
