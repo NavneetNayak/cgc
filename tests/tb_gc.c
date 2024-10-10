@@ -73,7 +73,6 @@ int main (int argc, char **argv) {
 	alloc_t *allocator = alloc_init();
 	allocator->bos = &argc;
 	test_gc(allocator);
-	// test_gc(allocator);
 	return 0;
 }
 
