@@ -22,7 +22,6 @@ typedef struct alloc {
 
 #define PAGE_SIZE 4096
 #define HEADER_SIZE sizeof(block_t)
-// #define ALLOC_LIMIT 2 * PAGE_SIZE
 #define ALLOC_LIMIT 2 * PAGE_SIZE
 #define ALLOC_FAILURE 1
 #define ALLOC_SUCCESS 0
@@ -35,3 +34,4 @@ static uintptr_t *getbos();
 alloc_t *alloc_init();
 void *mem_alloc(alloc_t *allocator, size_t num_units);
 void gc_collect(alloc_t *allocator);
+

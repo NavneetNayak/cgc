@@ -85,3 +85,4 @@ void gc_collect(alloc_t *allocator) {
     }
   }
 }
+
