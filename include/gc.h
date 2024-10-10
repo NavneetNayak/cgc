@@ -1,21 +1,8 @@
-// #define _XOPEN_SOURCE 700
-// #define _DARWIN_C_SOURCE
+#pragma once
 
-// #include <dlfcn.h>
-// #include <execinfo.h> // for backtrace functions
-// #include <libunwind.h>
-// #include <pthread.h>
-// #include <stdbool.h>
-// #include <stddef.h>
-// #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-// #include <sys/_types/_u_int32_t.h>
-// #include <sys/_types/_u_int8_t.h>
 #include <sys/mman.h>
-// #include <sys/sysctl.h>
-// #include <ucontext.h>
-// #include <unistd.h>
 
 typedef struct block {
   size_t size;
@@ -27,11 +14,16 @@ typedef struct block {
 typedef struct alloc {
   block_t *free_list;
   block_t *used_list;
+
   void *bos;
+
+  size_t allocated_size;
 } alloc_t;
 
 #define PAGE_SIZE 4096
 #define HEADER_SIZE sizeof(block_t)
+// #define ALLOC_LIMIT 2 * PAGE_SIZE
+#define ALLOC_LIMIT 128
 #define ALLOC_FAILURE 1
 #define ALLOC_SUCCESS 0
 

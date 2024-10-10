@@ -1,4 +1,4 @@
-#include "../include/gc.h"
+#include "gc.h"
 
 static void *mempage_fetch(unsigned int num_pages) {
   void *block = mmap(NULL, num_pages * PAGE_SIZE, PROT_READ | PROT_WRITE,
@@ -82,6 +82,10 @@ u_int16_t add_to_free_list(alloc_t *allocator, block_t *block) {
 }
 
 void *mem_alloc(alloc_t *allocator, size_t num_units) {
+  if (allocator->allocated_size > ALLOC_LIMIT) {
+    gc_collect(allocator);
+  }
+
   size_t total_size = (num_units + sizeof(block_t) - 1) / sizeof(block_t) + 1;
   total_size *= sizeof(block_t);
 
@@ -102,6 +106,7 @@ void *mem_alloc(alloc_t *allocator, size_t num_units) {
         free_list->prev = allocator->used_list;
         allocator->used_list->next = free_list;
 
+        allocator->allocated_size += free_list->size;
         return (void *)(free_list + 1);
       }
       if (free_list->size - total_size >= sizeof(block_t)) {
@@ -122,6 +127,7 @@ void *mem_alloc(alloc_t *allocator, size_t num_units) {
         free_list->prev = allocator->used_list;
         allocator->used_list->next = free_list;
 
+        allocator->allocated_size += free_list->size;
         return (void *)(free_list + 1);
       }
     }

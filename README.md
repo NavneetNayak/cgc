@@ -1,16 +1,30 @@
 # cgc
-A Mark And Sweep Garbage Collector Written In C.
+A mark and sweep garbage collector written in c
 
-DONE:
-- [x] Memory allocation 
-- [x] Memory deallocation with merging of memory
-- [x] Marking all reachable blocks for root pointers of stack frame
-- [x] Sweeping unreachable blocks
+## Usage
+```
+#include "gc.h"
 
-TODO:
-- [ ] Make the code not scuffed
-- [ ] Scan the Data segment and registers
-- [ ] Hashtable to store block information
-- [ ] Keep track of Heap limits
-- [ ] Multithreading
-- [ ] Further algorithm implementation
+------------------------------------------------------
+
+void some_function () {
+  for (int i = 0; i < 1000; i++) {
+    int *my_obj = mem_alloc(allocator, sizeof(int));
+  }
+}
+
+int main (int argc, char **argv) {
+  alloc_t *allocator = alloc_init();
+  if (allocator == NULL) exit(-1);
+
+------------------------------------------------------
+
+  some_function();
+
+------------------------------------------------------
+
+  return 0;
+
+}
+
+```

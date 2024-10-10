@@ -1,4 +1,4 @@
-#include "../include/gc.h"
+#include "gc.h"
 
 static void scan_mem(alloc_t *allocator, uintptr_t *start, uintptr_t *end) {
   block_t *current_block = allocator->used_list->next;
@@ -18,7 +18,7 @@ static void scan_mem(alloc_t *allocator, uintptr_t *start, uintptr_t *end) {
       uintptr_t block_end = block_start + 1 + current_block->size;
 
       if (ptr_value >= block_start && ptr_value < block_end) {
-        printf("Marked block of size: %ld\n", current_block->size);
+        // printf("Marked block of size: %ld\n", current_block->size);
         current_block->marked = 1; // Mark the block as reachable
         break;
       }
@@ -32,13 +32,15 @@ static void scan_mem(alloc_t *allocator, uintptr_t *start, uintptr_t *end) {
 }
 
 void gc_collect(alloc_t *allocator) {
+  printf("***Starting Garbage Collection Process*** Allocation size: %ld\n", allocator->allocated_size);
+
   void *bos = allocator->bos;
   void *tos = __builtin_frame_address(0);
 
   scan_mem(allocator, tos, bos);
-  print_usedlist(allocator->used_list);
+  // print_usedlist(allocator->used_list);
 
-  printf("Finished scanning root pointers\n");
+  // printf("Finished scanning root pointers\n");
 
   // DFS
   block_t *used_list = allocator->used_list->next;
@@ -48,13 +50,13 @@ void gc_collect(alloc_t *allocator) {
       continue;
     }
 
-    printf("Currently scanning block of size: %ld\n", used_list->size);
+    // printf("Currently scanning block of size: %ld\n", used_list->size);
     scan_mem(allocator, (void *)(used_list + 1), (void *)(used_list) + used_list->size);
 
     used_list = used_list->next;
   }
 
-  print_usedlist(allocator->used_list);
+  // print_usedlist(allocator->used_list);
 
   block_t *current = allocator->used_list->next;
   while (current != NULL) {
@@ -75,8 +77,11 @@ void gc_collect(alloc_t *allocator) {
       }
 
       // Add to free list
-      printf("Reclaimed block of size: %ld\n", unused_block->size);
-      add_to_free_list(allocator, unused_block);
+      // printf("Reclaimed block of size: %ld\n", unused_block->size);
+      size_t size = unused_block->size;
+      if ( add_to_free_list(allocator, unused_block) != ALLOC_FAILURE) {
+        allocator->allocated_size -= size;
+      }
     }
   }
 }
