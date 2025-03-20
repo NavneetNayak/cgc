@@ -1,4 +1,4 @@
-# cgc
+# gc-c
 A mark and sweep garbage collector written in c
 
 ## Compile and run tests
